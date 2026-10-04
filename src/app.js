@@ -1,1157 +1,421 @@
-/* =========================================================
-   HERBAL PLANTS CSP
-   INTERACTIVE JAVASCRIPT
-   NO LOADING FEATURE
-   ========================================================= */
-
-
-/* =========================================================
-   MOBILE MENU
-   ========================================================= */
-
-const menuBtn = document.getElementById("menuBtn");
-const navLinks = document.getElementById("navLinks");
-
-if (menuBtn && navLinks) {
-
-    menuBtn.addEventListener("click", () => {
-
-        navLinks.classList.toggle("active");
-
-    });
-
-    document.querySelectorAll(".nav-links a").forEach(link => {
-
-        link.addEventListener("click", () => {
-
-            navLinks.classList.remove("active");
-
-        });
-
-    });
-
-}
-
-
-/* =========================================================
-   DARK / LIGHT MODE
-   ========================================================= */
-
-const themeBtn = document.getElementById("themeBtn");
-
-if (themeBtn) {
-
-    const savedTheme = localStorage.getItem("herbalTheme");
-
-    if (savedTheme === "dark") {
-
-        document.body.classList.add("dark-mode");
-
-        themeBtn.textContent = "☀️";
-
-    }
-
-    themeBtn.addEventListener("click", () => {
-
-        document.body.classList.toggle("dark-mode");
-
-        if (document.body.classList.contains("dark-mode")) {
-
-            localStorage.setItem("herbalTheme", "dark");
-
-            themeBtn.textContent = "☀️";
-
-        } else {
-
-            localStorage.setItem("herbalTheme", "light");
-
-            themeBtn.textContent = "🌙";
-
-        }
-
-    });
-
-}
-
-
-/* =========================================================
-   DATE & TIME
-   ========================================================= */
-
-function updateDateTime() {
-
-    const dateTime = document.getElementById("dateTime");
-
-    if (!dateTime) return;
-
-    const now = new Date();
-
-    const date = now.toLocaleDateString(
-        "en-IN",
-        {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        }
-    );
-
-    const time = now.toLocaleTimeString(
-        "en-IN",
-        {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
-        }
-    );
-
-    dateTime.textContent = `${date} | ${time}`;
-
-}
-
-updateDateTime();
-
-setInterval(updateDateTime, 1000);
-
-
-/* =========================================================
-   CURRENT YEAR
-   ========================================================= */
-
-const year = document.getElementById("year");
-
-if (year) {
-
-    year.textContent = new Date().getFullYear();
-
-}
-
-
-/* =========================================================
-   PLANT SEARCH
-   ========================================================= */
-
-const plantSearch = document.getElementById("plantSearch");
-
-const plantCards = document.querySelectorAll(".plant-card");
-
-const noPlants = document.getElementById("noPlants");
-
-
-function filterPlants() {
-
-    if (!plantSearch) return;
-
-    const searchText =
-        plantSearch.value.toLowerCase().trim();
-
-    const activeButton =
-        document.querySelector(".filter-btn.active");
-
-    const selectedCategory =
-        activeButton
-            ? activeButton.dataset.category
-            : "all";
-
-    let visiblePlants = 0;
-
-    plantCards.forEach(card => {
-
-        const cardText =
-            card.textContent.toLowerCase();
-
-        const cardCategory =
-            card.dataset.category;
-
-        const matchesSearch =
-            cardText.includes(searchText);
-
-        const matchesCategory =
-            selectedCategory === "all" ||
-            cardCategory === selectedCategory;
-
-        if (matchesSearch && matchesCategory) {
-
-            card.style.display = "";
-
-            visiblePlants++;
-
-        } else {
-
-            card.style.display = "none";
-
-        }
-
-    });
-
-
-    if (noPlants) {
-
-        noPlants.style.display =
-            visiblePlants === 0
-                ? "block"
-                : "none";
-
-    }
-
-}
-
-
-if (plantSearch) {
-
-    plantSearch.addEventListener(
-        "input",
-        filterPlants
-    );
-
-}
-
-
-/* =========================================================
-   PLANT CATEGORY FILTER
-   ========================================================= */
-
-const filterButtons =
-    document.querySelectorAll(".filter-btn");
-
-filterButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        filterButtons.forEach(btn => {
-
-            btn.classList.remove("active");
-
-        });
-
-        button.classList.add("active");
-
-        filterPlants();
-
-    });
-
-});
-
-
-/* =========================================================
-   PLANT DATA
-   ========================================================= */
-
-const plantData = {
-
-    tulsi: {
-
-        name: "Tulsi",
-
-        scientificName:
-            "Ocimum tenuiflorum",
-
-        category:
-            "Medicinal Plant",
-
-        emoji:
-            "🌿",
-
-        description:
-            "Tulsi is a common plant traditionally used in household wellness practices and herbal preparations.",
-
-        benefits: [
-
-            "Traditionally used in herbal drinks",
-
-            "Commonly grown in home gardens",
-
-            "Part of traditional wellness practices"
-
-        ]
-
-    },
-
-
-    neem: {
-
-        name: "Neem",
-
-        scientificName:
-            "Azadirachta indica",
-
-        category:
-            "Medicinal Plant",
-
-        emoji:
-            "🌳",
-
-        description:
-            "Neem is a useful tree known for its traditional applications and importance in natural practices.",
-
-        benefits: [
-
-            "Traditionally used in skin-care practices",
-
-            "Used in natural household practices",
-
-            "Useful tree for the environment"
-
-        ]
-
-    },
-
-
-    aloe: {
-
-        name: "Aloe Vera",
-
-        scientificName:
-            "Aloe barbadensis miller",
-
-        category:
-            "Medicinal Plant",
-
-        emoji:
-            "🌱",
-
-        description:
-            "Aloe Vera is a succulent plant commonly used in traditional skin-care practices.",
-
-        benefits: [
-
-            "Commonly used for skin care",
-
-            "Easy to grow at home",
-
-            "Requires relatively little water"
-
-        ]
-
-    },
-
-
-    ginger: {
-
-        name: "Ginger",
-
-        scientificName:
-            "Zingiber officinale",
-
-        category:
-            "Spice Plant",
-
-        emoji:
-            "🫚",
-
-        description:
-            "Ginger is a spice and herbal plant commonly used in food and traditional preparations.",
-
-        benefits: [
-
-            "Used in cooking",
-
-            "Commonly used in herbal drinks",
-
-            "Part of traditional food practices"
-
-        ]
-
-    },
-
-
-    turmeric: {
-
-        name: "Turmeric",
-
-        scientificName:
-            "Curcuma longa",
-
-        category:
-            "Spice Plant",
-
-        emoji:
-            "🌱",
-
-        description:
-            "Turmeric is a widely used spice and traditional herbal plant.",
-
-        benefits: [
-
-            "Used in cooking",
-
-            "Contains curcumin",
-
-            "Used in traditional practices"
-
-        ]
-
-    },
-
-
-    hibiscus: {
-
-        name: "Hibiscus",
-
-        scientificName:
-            "Hibiscus rosa-sinensis",
-
-        category:
-            "Flowering Plant",
-
-        emoji:
-            "🌺",
-
-        description:
-            "Hibiscus is a flowering plant commonly grown in gardens and used in traditional practices.",
-
-        benefits: [
-
-            "Beautiful garden plant",
-
-            "Used in traditional hair-care practices",
-
-            "Supports biodiversity in gardens"
-
-        ]
-
-    },
-
-
-    mint: {
-
-        name: "Mint",
-
-        scientificName:
-            "Mentha",
-
-        category:
-            "Medicinal Plant",
-
-        emoji:
-            "🌱",
-
-        description:
-            "Mint is an aromatic herb commonly used in food, drinks and traditional preparations.",
-
-        benefits: [
-
-            "Used in food and drinks",
-
-            "Strong natural aroma",
-
-            "Can be grown in home gardens"
-
-        ]
-
-    },
-
-
-    lemongrass: {
-
-        name: "Lemongrass",
-
-        scientificName:
-            "Cymbopogon",
-
-        category:
-            "Medicinal Plant",
-
-        emoji:
-            "🌾",
-
-        description:
-            "Lemongrass is an aromatic plant commonly used in food, drinks and traditional preparations.",
-
-        benefits: [
-
-            "Used in herbal drinks",
-
-            "Has a pleasant aroma",
-
-            "Can be grown in suitable gardens"
-
-        ]
-
-    }
-
-};
-
-
-/* =========================================================
-   PLANT DETAILS MODAL
-   ========================================================= */
-
-const modal =
-    document.getElementById("plantModal");
-
-const modalClose =
-    document.getElementById("modalClose");
-
-const modalName =
-    document.getElementById("modalName");
-
-const modalScientific =
-    document.getElementById("modalScientific");
-
-const modalCategory =
-    document.getElementById("modalCategory");
-
-const modalDescription =
-    document.getElementById("modalDescription");
-
-const modalBenefits =
-    document.getElementById("modalBenefits");
-
-const modalEmoji =
-    document.getElementById("modalEmoji");
-
-
-document.querySelectorAll(".view-plant")
-    .forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            const plantId =
-                button.dataset.plant;
-
-            const plant =
-                plantData[plantId];
-
-            if (!plant || !modal) return;
-
-
-            modalName.textContent =
-                plant.name;
-
-            modalScientific.textContent =
-                `Scientific Name: ${plant.scientificName}`;
-
-            modalCategory.textContent =
-                plant.category;
-
-            modalDescription.textContent =
-                plant.description;
-
-            modalEmoji.textContent =
-                plant.emoji;
-
-
-            modalBenefits.innerHTML = "";
-
-
-            plant.benefits.forEach(benefit => {
-
-                const li =
-                    document.createElement("li");
-
-                li.textContent =
-                    benefit;
-
-                modalBenefits.appendChild(li);
-
-            });
-
-
-            modal.classList.add("show");
-
-            document.body.style.overflow =
-                "hidden";
-
-        });
-
-    });
-
-
-function closeModal() {
-
-    if (!modal) return;
-
-    modal.classList.remove("show");
-
-    document.body.style.overflow = "";
-
-}
-
-
-if (modalClose) {
-
-    modalClose.addEventListener(
-        "click",
-        closeModal
-    );
-
-}
-
-
-if (modal) {
-
-    modal.addEventListener(
-        "click",
-        event => {
-
-            if (event.target === modal) {
-
-                closeModal();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ESCAPE KEY
-   ========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (event.key === "Escape") {
-
-            closeModal();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   INTERACTIVE QUIZ
-   ========================================================= */
-
-const quizQuestions = [
-
-    {
-        question:
-            "Which plant is commonly known as a medicinal plant?",
-
-        options: [
-            "Tulsi",
-            "Rose",
-            "Mango",
-            "Wheat"
-        ],
-
-        answer:
-            "Tulsi"
-    },
-
-
-    {
-        question:
-            "Which plant is commonly used as a spice?",
-
-        options: [
-            "Ginger",
-            "Rose",
-            "Grass",
-            "Sunflower"
-        ],
-
-        answer:
-            "Ginger"
-    },
-
-
-    {
-        question:
-            "Which plant is known for traditional natural applications?",
-
-        options: [
-            "Neem",
-            "Apple",
-            "Rice",
-            "Banana"
-        ],
-
-        answer:
-            "Neem"
-    },
-
-
-    {
-        question:
-            "Which plant is commonly used in traditional skin-care practices?",
-
-        options: [
-            "Aloe Vera",
-            "Rice",
-            "Wheat",
-            "Corn"
-        ],
-
-        answer:
-            "Aloe Vera"
-    },
-
-
-    {
-        question:
-            "Which spice contains curcumin?",
-
-        options: [
-            "Turmeric",
-            "Ginger",
-            "Pepper",
-            "Cardamom"
-        ],
-
-        answer:
-            "Turmeric"
-    }
-
+const plants = [
+  {
+    name: "Tulsi",
+    scientific: "Ocimum tenuiflorum",
+    category: ["medicinal", "wellness"],
+    image: "https://images.unsplash.com/photo-1601055903647-52b8a5f4a7a5?auto=format&fit=crop&w=700&q=80",
+    benefits: "Traditionally used for wellness, immunity support and respiratory care.",
+    parts: "Leaves and seeds",
+    water: "Medium",
+    sunlight: "High",
+    temperature: "20–30°C",
+    uses: "Herbal drinks and traditional home practices"
+  },
+  {
+    name: "Neem",
+    scientific: "Azadirachta indica",
+    category: ["medicinal", "beauty"],
+    image: "https://images.unsplash.com/photo-1599598425947-3307c7f0a8f4?auto=format&fit=crop&w=700&q=80",
+    benefits: "Traditionally valued for skin and personal care.",
+    parts: "Leaves, bark and seeds",
+    water: "Low",
+    sunlight: "High",
+    temperature: "20–35°C",
+    uses: "Traditional skin and household uses"
+  },
+  {
+    name: "Aloe Vera",
+    scientific: "Aloe barbadensis miller",
+    category: ["beauty", "medicinal"],
+    image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=700&q=80",
+    benefits: "Commonly used in traditional skin-care practices.",
+    parts: "Leaf gel",
+    water: "Low",
+    sunlight: "Medium",
+    temperature: "18–30°C",
+    uses: "Traditional skin and beauty applications"
+  },
+  {
+    name: "Ginger",
+    scientific: "Zingiber officinale",
+    category: ["food", "medicinal"],
+    image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=700&q=80",
+    benefits: "Traditionally used for digestion and common cold-related drinks.",
+    parts: "Rhizome",
+    water: "Medium",
+    sunlight: "Medium",
+    temperature: "20–30°C",
+    uses: "Food and herbal drinks"
+  },
+  {
+    name: "Turmeric",
+    scientific: "Curcuma longa",
+    category: ["food", "medicinal"],
+    image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=700&q=80",
+    benefits: "Traditionally used in food and wellness practices.",
+    parts: "Rhizome",
+    water: "Medium",
+    sunlight: "Medium",
+    temperature: "20–30°C",
+    uses: "Food and traditional practices"
+  },
+  {
+    name: "Hibiscus",
+    scientific: "Hibiscus rosa-sinensis",
+    category: ["beauty"],
+    image: "https://images.unsplash.com/photo-1567696153798-9111f9cd3d0d?auto=format&fit=crop&w=700&q=80",
+    benefits: "Popular in traditional hair and beauty practices.",
+    parts: "Flowers and leaves",
+    water: "Medium",
+    sunlight: "High",
+    temperature: "18–30°C",
+    uses: "Traditional beauty and hair care"
+  },
+  {
+    name: "Mint",
+    scientific: "Mentha",
+    category: ["food", "medicinal"],
+    image: "https://images.unsplash.com/photo-1628556270448-4d4e4148e1f1?auto=format&fit=crop&w=700&q=80",
+    benefits: "Traditionally used in food, drinks and digestion-related practices.",
+    parts: "Leaves",
+    water: "High",
+    sunlight: "Medium",
+    temperature: "15–25°C",
+    uses: "Food and herbal drinks"
+  },
+  {
+    name: "Lemongrass",
+    scientific: "Cymbopogon",
+    category: ["food", "wellness"],
+    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80",
+    benefits: "Popular in herbal drinks and traditional wellness practices.",
+    parts: "Stems and leaves",
+    water: "Medium",
+    sunlight: "High",
+    temperature: "20–30°C",
+    uses: "Herbal tea and food"
+  }
 ];
 
+const plantGrid = document.getElementById("plantGrid");
+const searchInput = document.getElementById("searchInput");
+const modal = document.getElementById("plantModal");
+const modalContent = document.getElementById("modalContent");
 
-const quizContainer =
-    document.getElementById("quizContainer");
+let favorites = JSON.parse(localStorage.getItem("herbalFavorites")) || [];
+let selectedCategory = "all";
 
-const quizResult =
-    document.getElementById("quizResult");
+function renderPlants() {
+  const search = searchInput.value.toLowerCase();
 
-const quizRestart =
-    document.getElementById("quizRestart");
+  const filtered = plants.filter(plant => {
+    const categoryMatch =
+      selectedCategory === "all" ||
+      plant.category.includes(selectedCategory);
 
+    const searchMatch =
+      plant.name.toLowerCase().includes(search) ||
+      plant.benefits.toLowerCase().includes(search);
 
-let currentQuestion = 0;
+    return categoryMatch && searchMatch;
+  });
 
+  plantGrid.innerHTML = filtered.map(plant => `
+    <article class="plant-card">
+      <img class="plant-img" src="${plant.image}" alt="${plant.name}">
+
+      <div class="plant-info">
+        <button class="favorite" onclick="toggleFavorite('${plant.name}')">
+          ${favorites.includes(plant.name) ? "❤️" : "🤍"}
+        </button>
+
+        <h3>${plant.name}</h3>
+        <p><i>${plant.scientific}</i></p>
+        <p>${plant.benefits}</p>
+
+        <button class="btn" onclick="showPlant('${plant.name}')">
+          View Details
+        </button>
+      </div>
+    </article>
+  `).join("");
+}
+
+function showPlant(name) {
+  const plant = plants.find(p => p.name === name);
+
+  modalContent.innerHTML = `
+    <h2>🌿 ${plant.name}</h2>
+    <p><b>Scientific Name:</b> ${plant.scientific}</p>
+    <p><b>Benefits:</b> ${plant.benefits}</p>
+    <p><b>Parts Used:</b> ${plant.parts}</p>
+    <p><b>Common Uses:</b> ${plant.uses}</p>
+    <p><b>💧 Water:</b> ${plant.water}</p>
+    <p><b>☀️ Sunlight:</b> ${plant.sunlight}</p>
+    <p><b>🌡️ Temperature:</b> ${plant.temperature}</p>
+    <hr>
+    <p><b>⚠️ Safety:</b> Traditional uses do not replace professional medical advice. Use herbs responsibly.</p>
+  `;
+
+  modal.classList.add("show");
+}
+
+function toggleFavorite(name) {
+  if (favorites.includes(name)) {
+    favorites = favorites.filter(item => item !== name);
+  } else {
+    favorites.push(name);
+  }
+
+  localStorage.setItem("herbalFavorites", JSON.stringify(favorites));
+  renderPlants();
+}
+
+searchInput.addEventListener("input", renderPlants);
+
+document.querySelectorAll(".filter").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+
+    selectedCategory = button.dataset.category;
+    renderPlants();
+  });
+});
+
+document.getElementById("closeModal").onclick = () => {
+  modal.classList.remove("show");
+};
+
+modal.onclick = event => {
+  if (event.target === modal) {
+    modal.classList.remove("show");
+  }
+};
+
+/* HEALTH FINDER */
+document.getElementById("healthSelect").addEventListener("change", event => {
+  const value = event.target.value;
+
+  const results = {
+    immunity: ["Tulsi", "Ginger", "Turmeric"],
+    digestion: ["Ginger", "Mint"],
+    skin: ["Aloe Vera", "Neem"],
+    cold: ["Tulsi", "Ginger"],
+    wellness: ["Tulsi", "Lemongrass"]
+  };
+
+  const names = results[value] || [];
+
+  document.getElementById("healthResult").innerHTML =
+    names.length
+      ? `<h3>🌿 Suggested Plants</h3><p>${names.join(" • ")}</p>`
+      : "<p>Select a health need.</p>";
+});
+
+/* VIRTUAL GARDEN */
+let garden = JSON.parse(localStorage.getItem("herbalGarden")) || [];
+
+document.querySelectorAll(".gardenPlant").forEach(button => {
+  const name = button.textContent.replace(/[^\w ]/g, "").trim();
+
+  if (garden.includes(name)) {
+    button.classList.add("selected");
+  }
+
+  button.addEventListener("click", () => {
+    if (garden.includes(name)) {
+      garden = garden.filter(item => item !== name);
+      button.classList.remove("selected");
+    } else {
+      garden.push(name);
+      button.classList.add("selected");
+    }
+
+    localStorage.setItem("herbalGarden", JSON.stringify(garden));
+    document.getElementById("gardenCount").textContent = garden.length;
+  });
+});
+
+document.getElementById("gardenCount").textContent = garden.length;
+
+/* COMPARISON */
+const plant1 = document.getElementById("plant1");
+const plant2 = document.getElementById("plant2");
+
+plants.forEach(plant => {
+  plant1.innerHTML += `<option value="${plant.name}">${plant.name}</option>`;
+  plant2.innerHTML += `<option value="${plant.name}">${plant.name}</option>`;
+});
+
+plant2.selectedIndex = 1;
+
+document.getElementById("compareBtn").onclick = () => {
+  const a = plants.find(p => p.name === plant1.value);
+  const b = plants.find(p => p.name === plant2.value);
+
+  document.getElementById("comparisonResult").innerHTML = `
+    <h3>${a.name} vs ${b.name}</h3>
+    <p><b>Parts:</b> ${a.parts} | ${b.parts}</p>
+    <p><b>Water:</b> ${a.water} | ${b.water}</p>
+    <p><b>Sunlight:</b> ${a.sunlight} | ${b.sunlight}</p>
+    <p><b>Temperature:</b> ${a.temperature} | ${b.temperature}</p>
+  `;
+};
+
+/* DAILY TIP */
+const tips = [
+  "Water plants according to their actual soil needs.",
+  "Grow herbs in clean and healthy soil.",
+  "Provide enough sunlight for plants that need it.",
+  "Learn the correct plant name before using it.",
+  "Do not use herbal remedies as a replacement for medical treatment."
+];
+
+const day = new Date().getDate();
+
+document.getElementById("dailyTip").textContent =
+  tips[day % tips.length];
+
+/* PLANT OF DAY */
+const todayPlant = plants[day % plants.length];
+
+document.getElementById("plantOfDay").innerHTML = `
+  <div class="plant-card" style="max-width:600px;margin:auto">
+    <img class="plant-img" src="${todayPlant.image}">
+    <div class="plant-info">
+      <h3>${todayPlant.name}</h3>
+      <p><i>${todayPlant.scientific}</i></p>
+      <p>${todayPlant.benefits}</p>
+      <button class="btn" onclick="showPlant('${todayPlant.name}')">
+        Learn More
+      </button>
+    </div>
+  </div>
+`;
+
+/* QUIZ */
+const questions = [
+  {
+    q: "Which part of ginger is commonly used?",
+    a: ["Flower", "Rhizome", "Fruit", "Seed"],
+    correct: 1
+  },
+  {
+    q: "Which plant is commonly associated with traditional skin care?",
+    a: ["Aloe Vera", "Mint", "Ginger", "Lemongrass"],
+    correct: 0
+  },
+  {
+    q: "Which plant is commonly used in herbal drinks?",
+    a: ["Lemongrass", "Neem", "Aloe Vera", "Hibiscus"],
+    correct: 0
+  },
+  {
+    q: "Which plant is commonly used as a food spice?",
+    a: ["Turmeric", "Neem", "Aloe Vera", "Hibiscus"],
+    correct: 0
+  },
+  {
+    q: "Which plant is commonly used in traditional beauty practices?",
+    a: ["Hibiscus", "Ginger", "Mint", "Lemongrass"],
+    correct: 0
+  }
+];
+
+let quizIndex = 0;
 let quizScore = 0;
 
+function loadQuestion() {
+  const question = questions[quizIndex];
 
-function loadQuizQuestion() {
+  document.getElementById("question").textContent = question.q;
 
-    if (!quizContainer) return;
+  document.getElementById("answers").innerHTML =
+    question.a.map((answer, index) =>
+      `<button onclick="answerQuiz(${index})">${answer}</button>`
+    ).join("");
 
-
-    const question =
-        quizQuestions[currentQuestion];
-
-
-    quizContainer.innerHTML = `
-
-        <div class="quiz-question">
-
-            <h3>
-                ${currentQuestion + 1}.
-                ${question.question}
-            </h3>
-
-            <div class="quiz-options">
-
-                ${question.options
-                    .map(
-                        option => `
-                            <button
-                                class="quiz-option"
-                                data-answer="${option}"
-                            >
-                                ${option}
-                            </button>
-                        `
-                    )
-                    .join("")}
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    document
-        .querySelectorAll(".quiz-option")
-        .forEach(option => {
-
-            option.addEventListener(
-                "click",
-                () => {
-
-                    checkQuizAnswer(
-                        option.dataset.answer
-                    );
-
-                }
-            );
-
-        });
-
+  document.getElementById("score").textContent =
+    `Question ${quizIndex + 1} of ${questions.length} | Score: ${quizScore}`;
 }
 
+function answerQuiz(index) {
+  if (index === questions[quizIndex].correct) {
+    quizScore++;
+  }
 
-function checkQuizAnswer(answer) {
+  quizIndex++;
 
-    if (
-        answer ===
-        quizQuestions[currentQuestion].answer
-    ) {
+  if (quizIndex >= questions.length) {
+    document.getElementById("question").textContent =
+      `🎉 Quiz Completed! Score: ${quizScore}/${questions.length}`;
 
-        quizScore++;
+    document.getElementById("answers").innerHTML =
+      `<button onclick="restartQuiz()">🔄 Play Again</button>`;
 
-    }
+    document.getElementById("score").textContent =
+      "Great job learning about herbal plants!";
 
+    return;
+  }
 
-    currentQuestion++;
-
-
-    if (
-        currentQuestion <
-        quizQuestions.length
-    ) {
-
-        loadQuizQuestion();
-
-    } else {
-
-        showQuizResult();
-
-    }
-
+  loadQuestion();
 }
 
-
-function showQuizResult() {
-
-    if (quizContainer) {
-
-        quizContainer.innerHTML = "";
-
-    }
-
-
-    if (quizResult) {
-
-        quizResult.innerHTML = `
-
-            <h3>
-                🎉 Quiz Completed!
-            </h3>
-
-            <p>
-                Your Score:
-                <strong>
-                    ${quizScore}/${quizQuestions.length}
-                </strong>
-            </p>
-
-        `;
-
-        quizResult.classList.add("show");
-
-    }
-
-
-    if (quizRestart) {
-
-        quizRestart.style.display =
-            "inline-flex";
-
-    }
-
+function restartQuiz() {
+  quizIndex = 0;
+  quizScore = 0;
+  loadQuestion();
 }
 
+/* MENU */
+document.getElementById("menuBtn").onclick = () => {
+  document.getElementById("navLinks").classList.toggle("show");
+};
 
-if (quizRestart) {
+/* DARK MODE */
+document.getElementById("themeBtn").onclick = () => {
+  document.body.classList.toggle("dark");
 
-    quizRestart.addEventListener(
-        "click",
-        () => {
+  const dark = document.body.classList.contains("dark");
 
-            currentQuestion = 0;
+  localStorage.setItem("herbalDarkMode", dark);
 
-            quizScore = 0;
+  document.getElementById("themeBtn").textContent =
+    dark ? "☀️" : "🌙";
+};
 
-
-            if (quizResult) {
-
-                quizResult.classList.remove("show");
-
-                quizResult.innerHTML = "";
-
-            }
-
-
-            quizRestart.style.display =
-                "none";
-
-
-            loadQuizQuestion();
-
-        }
-    );
-
+if (localStorage.getItem("herbalDarkMode") === "true") {
+  document.body.classList.add("dark");
+  document.getElementById("themeBtn").textContent = "☀️";
 }
 
-
-if (quizContainer) {
-
-    loadQuizQuestion();
-
-}
-
-
-/* =========================================================
-   MUSIC BUTTON
-   ========================================================= */
-
-const music =
-    document.getElementById("backgroundMusic");
-
-const musicBtn =
-    document.getElementById("musicBtn");
-
-
-let musicPlaying = false;
-
-
-if (musicBtn && music) {
-
-    musicBtn.addEventListener(
-        "click",
-        () => {
-
-            if (musicPlaying) {
-
-                music.pause();
-
-                musicBtn.textContent =
-                    "🎵 Music";
-
-                musicPlaying = false;
-
-            } else {
-
-                music.play()
-                    .then(() => {
-
-                        musicBtn.textContent =
-                            "⏸️ Pause";
-
-                        musicPlaying = true;
-
-                    })
-                    .catch(() => {
-
-                        alert(
-                            "Please tap the music button again to start the music."
-                        );
-
-                    });
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   READ ALOUD
-   ========================================================= */
-
-document
-    .querySelectorAll(".read-btn")
-    .forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const targetId =
-                    button.dataset.target;
-
-                const target =
-                    document.getElementById(targetId);
-
-                if (!target) return;
-
-
-                if (
-                    !("speechSynthesis" in window)
-                ) {
-
-                    alert(
-                        "Read Aloud is not supported on this device."
-                    );
-
-                    return;
-
-                }
-
-
-                window.speechSynthesis.cancel();
-
-
-                const speech =
-                    new SpeechSynthesisUtterance(
-                        target.innerText
-                    );
-
-
-                speech.lang = "en-IN";
-
-                speech.rate = 0.9;
-
-                speech.pitch = 1;
-
-
-                window.speechSynthesis.speak(
-                    speech
-                );
-
-            }
-        );
-
-    });
-
-
-/* =========================================================
-   BACK TO TOP
-   ========================================================= */
-
-const backToTop =
-    document.getElementById("backToTop");
-
-
-window.addEventListener(
-    "scroll",
-    () => {
-
-        if (!backToTop) return;
-
-
-        if (window.scrollY > 450) {
-
-            backToTop.classList.add("show");
-
-        } else {
-
-            backToTop.classList.remove("show");
-
-        }
-
-    }
-);
-
-
-if (backToTop) {
-
-    backToTop.addEventListener(
-        "click",
-        () => {
-
-            window.scrollTo({
-
-                top: 0,
-
-                behavior: "smooth"
-
-            });
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SCROLL ANIMATIONS
-   ========================================================= */
-
-const revealElements =
-    document.querySelectorAll(".reveal");
-
-
-function revealOnScroll() {
-
-    const windowHeight =
-        window.innerHeight;
-
-
-    revealElements.forEach(element => {
-
-        const elementTop =
-            element.getBoundingClientRect().top;
-
-
-        if (
-            elementTop <
-            windowHeight - 80
-        ) {
-
-            element.classList.add("active");
-
-        }
-
-    });
-
-}
-
-
-window.addEventListener(
-    "scroll",
-    revealOnScroll
-);
-
-revealOnScroll();
-
-
-/* =========================================================
-   CTRL + K SEARCH
-   ========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            (event.ctrlKey || event.metaKey) &&
-            event.key.toLowerCase() === "k"
-        ) {
-
-            event.preventDefault();
-
-            if (plantSearch) {
-
-                plantSearch.focus();
-
-            }
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   SMOOTH NAVIGATION
-   ========================================================= */
-
-document
-    .querySelectorAll('a[href^="#"]')
-    .forEach(link => {
-
-        link.addEventListener(
-            "click",
-            event => {
-
-                const targetId =
-                    link.getAttribute("href");
-
-
-                if (
-                    targetId &&
-                    targetId !== "#"
-                ) {
-
-                    const target =
-                        document.querySelector(
-                            targetId
-                        );
-
-
-                    if (target) {
-
-                        event.preventDefault();
-
-
-          
+/* YEAR */
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* TOP BUTTON */
+const topBtn = document.getElementById("topBtn");
+
+window.addEventListener("scroll", () => {
+  topBtn.style.display = window.scrollY > 400 ? "block" : "none";
+});
+
+topBtn.onclick = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
+
+/* KEYBOARD SEARCH */
+document.addEventListener("keydown", event => {
+  if (event.ctrlKey && event.key.toLowerCase() === "k") {
+    event.preventDefault();
+    searchInput.focus();
+  }
+});
+
+/* START */
+renderPlants();
+loadQuestion();
